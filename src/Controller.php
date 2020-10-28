@@ -82,41 +82,50 @@ class Controller
             if (isset($_POST['dispatch'])) {
 
                 if (isset($_POST['trialDispatch']))
-                {
-                    $this->dispatch->address = [$_POST['receiveremail'], $_POST['receivername']];
-                    if ($this->dispatch->dispatch()) {
-                        return $this->render("dispatch", ["statement" => "Die Email wurde versendet !"]);
-                    } else {
-                        if($this->dispatch->serverstatus == false) {
-                            return $this->render("dispatch", ["statement" => "Der Server ist zurzeit nicht erreichbar! "]);
+                {   
+                    if (isset($_POST['templates1'])) {
+                        
+                        $this->dispatch->address = [$_POST['receiveremail'], $_POST['receivername']];
+                        if ($this->dispatch->dispatch()) {
+                            return $this->render("dispatch", ["statement" => "Die Email wurde versendet !"]);
                         } else {
-                            return $this->render("dispatch", ["statement" => "Die Email konnte nicht versendet werden !"]);
-                        } 
+                            if($this->dispatch->serverstatus == false) {
+                                return $this->render("dispatch", ["statement" => "Der Server ist zurzeit nicht erreichbar! "]);
+                            } else {
+                                return $this->render("dispatch", ["statement" => "Die Email konnte nicht versendet werden !"]);
+                            } 
+                        }
+                    } else {
+                        return $this->render("dispatch", ["statement" => "Sie muessen ein Template auswaehlen! "]);
                     }
                 }
 
                 if (isset($_POST['customerDispatch']))
                 {
-                    $this->dispatch->addresses = file(__DIR__."/storage/addresses.csv");
-                    $i = 0;
-                    $count = 0;
-                    while($this->dispatch->addresses[$i] != NULL) {
-                        $this->dispatch->address = explode(";" ,$this->dispatch->addresses[$i]);
-                        if ($this->dispatch->Dispatch()) {
-                            $count++;
-                            if ($this->dispatch->serverstatus == false){
-                                break;
-                                return $this->render("dispatch", ["statement" => "Der Server ist zurzeit nicht erreichbar! "]);
+                    if (isset($_POST['templates1'])) {
+                        $this->dispatch->addresses = file(__DIR__."/storage/addresses.csv");
+                        $i = 0;
+                        $count = 0;
+                        while($this->dispatch->addresses[$i] != NULL) {
+                            $this->dispatch->address = explode(";" ,$this->dispatch->addresses[$i]);
+                            if ($this->dispatch->Dispatch()) {
+                                $count++;
+                                if ($this->dispatch->serverstatus == false){
+                                    break;
+                                    return $this->render("dispatch", ["statement" => "Der Server ist zurzeit nicht erreichbar! "]);
+                                }
                             }
+                            $i++;
                         }
-                        $i++;
-                    }
-                    if ($count == $i ) {
-                        return $this->render("dispatch", ["statement" => "Alle Email wurden versendet !"]);
-                    } elseif ($count > 0) {
-                        return $this->render("dispatch", ["statement" => "Es konnte nicht alle Emails versendet werden! Eventuell Log prüfen! "]);
+                        if ($count == $i ) {
+                            return $this->render("dispatch", ["statement" => "Alle Email wurden versendet !"]);
+                        } elseif ($count > 0) {
+                            return $this->render("dispatch", ["statement" => "Es konnte nicht alle Emails versendet werden! Eventuell Log prüfen! "]);
+                        } else {
+                            return $this->render("dispatch", ["statement" => "Es konnte keine Email versandt werden! Eventuell Log prüfen! "]);
+                        }
                     } else {
-                        return $this->render("dispatch", ["statement" => "Es konnte keine Email versandt werden! Eventuell Log prüfen! "]);
+                        return $this->render("dispatch", ["statement" => "Sie muessen ein Template auswaehlen! "]);
                     }
                 }
             }
