@@ -7,6 +7,8 @@ class Dispatch
     public $address = [];
     public $templateName = [];
     private $log;
+    public $subject;
+    public $serverstatus = true;
 
     public function __construct()
     {
@@ -29,6 +31,10 @@ class Dispatch
 
     public function Dispatch()
     {
+        if (!isset($this->subject))
+        {
+            $this->subject = $_ENV['SUBJECT_EMAIL'];
+        }
         $i = 1;
         $receiverEmail = $this->address[0];
         $receiverName = $this->address[1];
@@ -38,19 +44,23 @@ class Dispatch
         $template = str_replace("{{ name }}", $this->address[1], $template);
         $template = str_replace("{{ id }}", $this->address[2], $template);
         $template = str_replace("{{ code }}", $this->address[3], $template);
-
-        $message = new Swift_Message($_ENV['SUBJECT_EMAIL']);
-        $message->setFrom(array($_ENV['SENDER_EMAIL'] => $_ENV['SENDER_NAME']));
-        $message->setTo(array($receiverEmail => $receiverName));
-        $message->addPart($template, 'text/html');
-
-        if (($i % 4000) !== 0) {
-            $transport = (new Swift_SmtpTransport($_ENV['SMTP_IP'], $_ENV['SMTP_PORT']))
-            ->setUsername($_ENV['SMTP_USERNAME'])
-            ->setPassword($_ENV['SMTP_PASSWORD']);
-            $mailer = new Swift_Mailer($transport);
-        } 
-        $result = $mailer->send($message);
+        try {
+            $message = new Swift_Message($this->subject);
+            $message->setFrom(array($_ENV['SENDER_EMAIL'] => $_ENV['SENDER_NAME']));
+            $message->setTo(array($receiverEmail => $receiverName));
+            $message->addPart($template, 'text/html');
+    
+            if (($i % 4000) !== 0) {
+                $transport = (new Swift_SmtpTransport($_ENV['SMTP_IP'], $_ENV['SMTP_PORT']))
+                ->setUsername($_ENV['SMTP_USERNAME'])
+                ->setPassword($_ENV['SMTP_PASSWORD']);
+                $mailer = new Swift_Mailer($transport);
+            } 
+            $result = $mailer->send($message);
+        } catch (Swift_TransportException $e)
+        {
+            $this->serverstatus = false;
+        }
         $i++;
         
         if ($result == 0) {

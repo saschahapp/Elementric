@@ -74,6 +74,11 @@ class Controller
                 }
             }
 
+            if (!empty($_POST['subject'])) {
+    
+                $this->dispatch->subject = $_POST['subject'];
+            }
+
             if (isset($_POST['dispatch'])) {
 
                 if (isset($_POST['trialDispatch']))
@@ -82,7 +87,11 @@ class Controller
                     if ($this->dispatch->dispatch()) {
                         return $this->render("dispatch", ["statement" => "Die Email wurde versendet !"]);
                     } else {
-                        return $this->render("dispatch", ["statement" => "Die Email konnte nicht versendet werden !"]);
+                        if($this->dispatch->serverstatus == false) {
+                            return $this->render("dispatch", ["statement" => "Der Server ist zurzeit nicht erreichbar! "]);
+                        } else {
+                            return $this->render("dispatch", ["statement" => "Die Email konnte nicht versendet werden !"]);
+                        } 
                     }
                 }
 
@@ -95,6 +104,10 @@ class Controller
                         $this->dispatch->address = explode(";" ,$this->dispatch->addresses[$i]);
                         if ($this->dispatch->Dispatch()) {
                             $count++;
+                            if ($this->dispatch->serverstatus == false){
+                                break;
+                                return $this->render("dispatch", ["statement" => "Der Server ist zurzeit nicht erreichbar! "]);
+                            }
                         }
                         $i++;
                     }

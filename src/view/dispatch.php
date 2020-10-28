@@ -86,6 +86,12 @@
                     <p>
                         <input name="receivername" type="text" />
                     </p>
+                    <p>
+                        Bitte geben Sie hier den Betreff ein:
+                    </p>
+                    <p>
+                        <input name="subject" type="text" />
+                    </p>
                     <p> 
                     <p>
                         <input name="trialDispatch" type="checkbox" />

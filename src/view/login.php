@@ -36,7 +36,7 @@
                             <strong>
                             <span class="input-group-text" id="inputGroup-sizing-default">Passwort: </span>
                             </strong>
-                            <input type="text" name="password" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
+                            <input type="password" name="password" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
                         </div>
                 </div>
                 <div style="margin-left: 130px">
