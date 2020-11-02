@@ -2,6 +2,11 @@
 
 session_start();
 
+if ($_SERVER['REQUEST_URI'] == "/")
+{
+   $_SERVER['REQUEST_URI'] = "/login";
+}
+
 require (__DIR__."/src/vendor/autoload.php");
 require (__DIR__."/src/Dispatch.php");
 require (__DIR__."/src/Login.php");
