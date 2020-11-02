@@ -88,3 +88,6 @@
 [2020-11-02T09:42:34.310339+01:00] newsletter.INFO: receiverEmail: sascha-happ@live.de ,receiverTemplate: template2 [] []
 [2020-11-02T09:42:34.466606+01:00] newsletter.INFO: receiverEmail: quad461@gmail.com ,receiverTemplate: template2 [] []
 [2020-11-02T09:43:12.173879+01:00] newsletter.INFO: receiverEmail: quad461@gmail.com ,receiverTemplate: template3 [] []
+[2020-11-02T12:19:02.350345+00:00] newsletter.INFO: receiverEmail: sascha-happ@live.de ,receiverTemplate: 12334 [] []
+[2020-11-02T12:19:35.868482+00:00] newsletter.INFO: receiverEmail: sascha-happ@live.de ,receiverTemplate: template1 [] []
+[2020-11-02T12:19:36.054273+00:00] newsletter.INFO: receiverEmail: quad461@gmail.com ,receiverTemplate: template3 [] []
