@@ -31,7 +31,8 @@ class Controller
     
     public function dispatch()
     {
-        if ($this->login->check()) {
+        if ($this->login->check()) 
+        {
             if (!empty($_FILES)) {
                
                 if(isset($_FILES['htmlfile']['name'])) 
@@ -79,59 +80,87 @@ class Controller
                 $this->dispatch->subject = $_POST['subject'];
             }
 
-            if (isset($_POST['dispatch'])) {
-
-                if (isset($_POST['trialDispatch']))
-                {   
-                    if (isset($_POST['templates1'])) {
-                        
-                        $this->dispatch->address = [$_POST['receiveremail'], $_POST['receivername']];
-                        if ($this->dispatch->dispatch()) {
-                            return $this->render("dispatch", ["statement" => "Die Email wurde versendet !"]);
-                        } else {
-                            if($this->dispatch->serverstatus == false) {
-                                return $this->render("dispatch", ["statement" => "Der Server ist zurzeit nicht erreichbar! "]);
-                            } else {
-                                return $this->render("dispatch", ["statement" => "Die Email konnte nicht versendet werden !"]);
-                            } 
-                        }
+            if (isset($_POST['templates1'])) 
+            {
+                if (isset($_POST['trialDispatch'])) 
+                {
+                    $this->dispatch->address = [$_POST['receiveremail'], $_POST['receivername']];
+                    if ($this->dispatch->dispatch()) {
+                        return $this->render("dispatch", ["statement" => "Die Email wurde versendet !"]);
                     } else {
-                        return $this->render("dispatch", ["statement" => "Sie muessen ein Template auswaehlen! "]);
+                        if($this->dispatch->serverstatus == false) {
+                            return $this->render("dispatch", ["statement" => "Der Server ist zurzeit nicht erreichbar! "]);
+                        } else {
+                            return $this->render("dispatch", ["statement" => "Die Email konnte nicht versendet werden !"]);
+                        } 
                     }
                 }
-
                 if (isset($_POST['customerDispatch']))
                 {
-                    if (isset($_POST['templates1'])) {
-                        $this->dispatch->addresses = file(__DIR__."/storage/addresses.csv");
-                        $i = 0;
-                        $count = 0;
-                        while($this->dispatch->addresses[$i] != NULL) {
-                            $this->dispatch->address = explode(";" ,$this->dispatch->addresses[$i]);
-                            if ($this->dispatch->Dispatch()) {
-                                $count++;
-                                if ($this->dispatch->serverstatus == false){
-                                    break;
-                                    return $this->render("dispatch", ["statement" => "Der Server ist zurzeit nicht erreichbar! "]);
-                                }
-                            }
-                            $i++;
+                    $this->dispatch->addresses = file(__DIR__."/storage/addresses.csv");
+                    $i = 0;
+                    $count = 0;
+                    while($this->dispatch->addresses[$i] != NULL) {
+                        $this->dispatch->address = explode(";" ,$this->dispatch->addresses[$i]);
+                        if ($this->dispatch->Dispatch() == true) {
+                            $count++;
                         }
-                        if ($count == $i ) {
-                            return $this->render("dispatch", ["statement" => "Alle Email wurden versendet !"]);
-                        } elseif ($count > 0) {
-                            return $this->render("dispatch", ["statement" => "Es konnte nicht alle Emails versendet werden! Eventuell Log prüfen! "]);
-                        } else {
-                            return $this->render("dispatch", ["statement" => "Es konnte keine Email versandt werden! Eventuell Log prüfen! "]);
+                        if ($this->dispatch->serverstatus == false){
+                        break;
+                        return $this->render("dispatch", ["statement" => "Der Server ist zurzeit nicht erreichbar! "]);
                         }
-                    } else {
-                        return $this->render("dispatch", ["statement" => "Sie muessen ein Template auswaehlen! "]);
+                        $i++;
+                    }
+                    if ($count == $i ) 
+                    {
+                        return $this->render("dispatch", ["statement" => "Alle Email(s) wurden versendet !"]);
+                    } elseif ($count > 0) 
+                    {
+                        return $this->render("dispatch", ["statement" => "Es konnte nicht alle Emails versendet werden! Eventuell Log prüfen! "]);
+                    } else 
+                    {
+                        return $this->render("dispatch", ["statement" => "Es konnte keine Email versandt werden! Eventuell Log prüfen! "]);
                     }
                 }
+                if (isset($_POST['voucherDispatch']))
+                {
+                    $this->dispatch->addresses = file(__DIR__."/storage/addresses.csv");
+                    $random = rand(0, (count($this->dispatch->addresses) - 1));
+                    $i = 0;
+                    $count = 0;
+                    while($i < $_POST['numberOfDispatch']) {
+                        $this->dispatch->address = explode(";" ,$this->dispatch->addresses[$random]);
+                        if ($this->dispatch->Dispatch() == true) {
+                            $count++;
+                        }
+                        if ($this->dispatch->serverstatus == false){
+                        break;
+                        return $this->render("dispatch", ["statement" => "Der Server ist zurzeit nicht erreichbar! "]);
+                        }
+                        $i++;
+                    }
+                    if ($count == $i ) 
+                    {
+                        return $this->render("dispatch", ["statement" => "Alle Email(s) wurden versendet !"]);
+                    } elseif ($count > 0) 
+                    {
+                        return $this->render("dispatch", ["statement" => "Es konnte nicht alle Emails versendet werden! Eventuell Log prüfen! "]);
+                    } else 
+                    {
+                        return $this->render("dispatch", ["statement" => "Es konnte keine Email versandt werden! Eventuell Log prüfen! "]);
+                    }
+                }
+            } else 
+            {
+                if (isset($_POST['customerdispatch']) || isset($_POST['trydispatch'])  || isset($_POST['voucherdispatch']) || isset($_POST['data']) || empty($_POST))
+                {
+                    return $this->render("dispatch", []);
+                } else 
+                {
+                    return $this->render("dispatch", ["statement" => "Sie muessen ein Template auswaehlen! "]);
+                }
             }
-            return $this->render("dispatch", []);
-        }
-        else 
+        } else 
         {
             return Header("Location: login");
         }

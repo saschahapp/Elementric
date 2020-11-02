@@ -23,10 +23,16 @@
                     </button>
                 </form>
                 <form method="POST" style="float:left;margin-right: 50px" action="dispatch">
-                    <button type="submit" name="data" class="btn btn-primary btn-lg">Datei hochladen</button>
+                    <button type="submit" name="data" class="<?php if(isset($_POST['data'])) { echo "btn btn-dark btn-lg";} else { echo "btn btn-primary btn-lg";}?>">Datei hochladen</button>
+                </form>
+                <form method="POST" style="float:left;margin-right: 50px"  action="dispatch">
+                    <button type="submit" name="trydispatch" class="<?php if(isset($_POST['trydispatch'])) { echo "btn btn-dark btn-lg";} else { echo "btn btn-primary btn-lg";}?>">Test-Versand</button>
+                </form>
+                <form method="POST" style="float:left;margin-right: 50px" action="dispatch">
+                    <button type="submit" name="customerdispatch" class="<?php if(isset($_POST['customerdispatch'])) { echo "btn btn-dark btn-lg";} else { echo "btn btn-primary btn-lg";}?>">Kunden-Versand</button>
                 </form>
                 <form method="POST" action="dispatch">
-                    <button type="submit" name="dispatch" class="btn btn-primary btn-lg">Versand</button>
+                    <button type="submit" name="voucherdispatch" class="<?php if(isset($_POST['voucherdispatch'])) { echo "btn btn-dark btn-lg";} else { echo "btn btn-primary btn-lg";}?>">Gutschein-Versand</button>
                 </form>
             </div>
             <?php if (isset($_POST['data'])): ?>
@@ -53,7 +59,7 @@
                     </p>
                 </form>
             <?php endif; ?>
-            <?php if(isset($_POST['dispatch']) || !empty($_POST['numbersOfTemplates'])): ?>
+            <?php if(isset($_POST['trydispatch']) || isset($_POST['numbersOfTemplates'])): ?>
                 <form style="margin-bottom:50px" method="POST" action="dispatch">
                     Wie viele templates wollen Sie hinzufügen? 
                     <input type="number" name="numbersOfTemplates">
@@ -73,40 +79,101 @@
                                 </select>
                             </p>
                         <?php endfor; ?>   
-                    <?php endif;  ?>
+                    <?php endif; ?>
                     <p>
-                        Bitte geben Sie hier Ihre E-Mail ein (nur bei Testversand nötig!):
+                        Bitte geben Sie hier Ihre E-Mail ein:
                     </p>
                     <p>
-                        <input name="receiveremail" type="email" />
+                        <input name="receiveremail" type="email" required />
                     </p>
                     <p>
-                        Bitte geben Sie hier Ihren Namen ein (nur bei Testversand nötig!):
+                        Bitte geben Sie hier Ihren Namen ein:
                     </p>
                     <p>
-                        <input name="receivername" type="text" />
+                        <input name="receivername" type="text" required />
                     </p>
                     <p>
                         Bitte geben Sie hier den Betreff ein:
                     </p>
                     <p>
-                        <input name="subject" type="text" />
-                    </p>
-                    <p> 
-                    <p>
-                        <input name="trialDispatch" type="checkbox" />
-                        Test-Versand
+                        <input name="subject" type="text" required />
                     </p>
                     <p>
-                        <input name="customerDispatch" type="checkbox" />
-                        KundenVersand
-                    </p>
-                    <p>
-                        <input name="dispatch" type="submit" value="Bestätigen" />
+                        <input name="trialDispatch" type="submit" value="Bestätigen" />
                     </p>
                 </form>
             <?php endif; ?>
-        </div>
+            <?php if (isset($_POST['customerdispatch']) || $_POST['numbersOfTemplates2']): ?>
+                <form style="margin-bottom:50px" method="POST" action="dispatch">
+                    Wie viele templates wollen Sie hinzufügen? 
+                    <input type="number" name="numbersOfTemplates2">
+                    <input type="submit" name="templateShow" value="Hinzufügen" />
+                </form>
+                <form method="POST" action="dispatch">
+                    <?php if(!empty($_POST['numbersOfTemplates2'])): ?>
+                        <?php for ($i = 1; $i <= $_POST['numbersOfTemplates2']; $i++): ?>
+                            <p>
+                                Wählen Sie Ihr Templates aus:
+                                <select style="margin-bottom:50px" name="templates<?php echo filterHtmlTags($i); ?>">
+                                    <?php foreach($templates AS $template): ?>
+                                        <option>
+                                            <?php echo filterHtmlTags($template) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </p>
+                        <?php endfor; ?>   
+                    <?php endif; ?>
+                    <p>
+                        Bitte geben Sie hier den Betreff ein:
+                    </p>
+                    <p>
+                        <input name="subject" type="text" required />
+                    </p>
+                    <p>
+                        <input name="customerDispatch" type="submit" value="Bestätigen" />
+                    </p>
+                    
+                </form>
+            <?php endif; ?>
+            <?php if(isset($_POST['voucherdispatch']) || isset($_POST['numbersOfTemplates3'])): ?>
+                <form style="margin-bottom:50px" method="POST" action="dispatch">
+                    Wie viele templates wollen Sie hinzufügen? 
+                    <input type="number" name="numbersOfTemplates3">
+                    <input type="submit" name="templateShow" value="Hinzufügen" />
+                </form>
+                <form method="POST" action="dispatch">
+                    <?php if(!empty($_POST['numbersOfTemplates3'])): ?>
+                        <?php for ($i = 1; $i <= $_POST['numbersOfTemplates3']; $i++): ?>
+                            <p>
+                                Wählen Sie Ihr Templates aus:
+                                <select style="margin-bottom:50px" name="templates<?php echo filterHtmlTags($i); ?>">
+                                    <?php foreach($templates AS $template): ?>
+                                        <option>
+                                            <?php echo filterHtmlTags($template) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </p>
+                        <?php endfor; ?>   
+                    <?php endif; ?>
+                    <p>
+                        Bitte geben Sie hier den Betreff ein:
+                    </p>
+                    <p>
+                        <input name="subject" type="text" required />
+                    </p>
+                    <p>
+                        Bitte geben Sie hier die Anzahl der Versendungen ein:
+                    </p>
+                    <p>
+                        <input name="numberOfDispatch" type="numbers" required />
+                    </p>
+                    <p>
+                        <input name="voucherDispatch" type="submit" value="Bestätigen" />
+                    </p>
+            <?php endif; ?>
+
 
     <!-- Optional JavaScript; choose one of the two! -->
 

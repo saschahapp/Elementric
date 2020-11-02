@@ -14,7 +14,7 @@ function filterHtmlTags($value)
 
 $controller = new Controller();
 
-$pathinfo = $_SERVER["PATH_INFO"];
+$pathinfo = $_SERVER["REQUEST_URI"];
 
 $routes = [
    '/logout' => [
@@ -27,7 +27,6 @@ $routes = [
       'method' => 'dispatch'
    ]
 ];
-
 
 if (isset($routes[$pathinfo]))
 {
