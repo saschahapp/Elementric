@@ -22,7 +22,8 @@ class Dispatch
     public function moveUploadedFile($source, $destination)
     {
         $destination = __DIR__."/storage/template/{$destination}";
-        if (move_uploaded_file($source, $destination)) {
+        if (move_uploaded_file($source, $destination)) 
+        {
             return true;
         } else {
             return false;
@@ -44,7 +45,8 @@ class Dispatch
         $template = str_replace("{{ name }}", $this->address[1], $template);
         $template = str_replace("{{ id }}", $this->address[2], $template);
         $template = str_replace("{{ code }}", $this->address[3], $template);
-        try {
+        try 
+        {
             $message = new Swift_Message($this->subject);
             $message->setFrom(array($_ENV['SENDER_EMAIL'] => $_ENV['SENDER_NAME']));
             $message->setTo(array($receiverEmail => $receiverName));
@@ -63,7 +65,8 @@ class Dispatch
         }
         $i++;
         
-        if ($result == 0) {
+        if ($result == 0) 
+        {
             $this->log->info("Email an: ".$receiverEmail." konnte nicht versandt werden!");
             return false;
         } else {
@@ -74,9 +77,11 @@ class Dispatch
 
     public function fetchTemplates()
     {
-        if(is_dir(__DIR__."/storage/template")) {
+        if(is_dir(__DIR__."/storage/template")) 
+        {
             $handle = opendir(__DIR__."/storage/template");
-            while (($file = readdir($handle)) !== false){
+            while (($file = readdir($handle)) !== false)
+            {
                 $search = "/.html$/";
                 if (preg_match($search, $file)) 
                 {
@@ -85,7 +90,8 @@ class Dispatch
             }
             closedir($handle);
             return $this->templateName;
-        } else {
+        } else 
+        {
             return false;
         }
     }

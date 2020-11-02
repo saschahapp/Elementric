@@ -19,7 +19,8 @@ class Controller
 
     public function login()
     {
-        if(!empty($_POST['username']) && !empty($_POST['password'])){
+        if(!empty($_POST['username']) && !empty($_POST['password']))
+        {
 
             if($this->login->login($_POST['username'], $_POST['password'])) {
 
@@ -33,12 +34,13 @@ class Controller
     {
         if ($this->login->check()) 
         {
-            if (!empty($_FILES)) {
-               
+            if (!empty($_FILES)) 
+            {
                 if(isset($_FILES['htmlfile']['name'])) 
                 {
                     if ($this->dispatch->moveUploadedFile($_FILES['htmlfile']['tmp_name'],
-                    $_FILES['htmlfile']['name'])) {
+                    $_FILES['htmlfile']['name'])) 
+                    {
                         return $this->render("dispatch", ["statement" => "Die Datei wurde erfolgreich hochgeladen!"]);
                     } else {
                         return $this->render("dispatch", ["statement" => "Die Datei konnte nicht hochgeladen werden !"]);
@@ -48,25 +50,30 @@ class Controller
                 if(isset($_FILES['csvfile']['name']))
                 {
                     if($this->dispatch->moveUploadedFile($_FILES['csvfile']['tmp_name'],
-                    $_FILES['csvfile']['name'])) {
+                    $_FILES['csvfile']['name'])) 
+                    {
                         return $this->render("dispatch", ["statement" => "Die Datei wurde erfolgreich hochgeladen!"]);
-                    } else {
+                    } else 
+                    {
                         return $this->render("dispatch", ["statement" => "Die Datei konnte nicht hochgeladen werden !"]);
                     }
                 }
             }
 
-            if (isset($_POST['templateShow'])) {
+            if (isset($_POST['templateShow'])) 
+            {
                 $templates = $this->dispatch->fetchTemplates();
-                if ($templates) {
+                if ($templates) 
+                {
                     return $this->render("dispatch", ["templates" => $templates]);
-                } else {
+                } else 
+                {
                     return $this->render("dispatch", ["statement" => "Es wurden keine Templates gefunden !"]);
                 }
             }
 
-            if (isset($_POST['templates1'])) {
-
+            if (isset($_POST['templates1'])) 
+            {
                 $i = 1;
                 while (isset($_POST['templates'.$i])) 
                 {
@@ -75,8 +82,8 @@ class Controller
                 }
             }
 
-            if (!empty($_POST['subject'])) {
-    
+            if (!empty($_POST['subject'])) 
+            {
                 $this->dispatch->subject = $_POST['subject'];
             }
 
@@ -87,7 +94,8 @@ class Controller
                     $this->dispatch->address = [$_POST['receiveremail'], $_POST['receivername']];
                     if ($this->dispatch->dispatch()) {
                         return $this->render("dispatch", ["statement" => "Die Email wurde versendet !"]);
-                    } else {
+                    } else 
+                    {
                         if($this->dispatch->serverstatus == false) {
                             return $this->render("dispatch", ["statement" => "Der Server ist zurzeit nicht erreichbar! "]);
                         } else {
@@ -100,12 +108,15 @@ class Controller
                     $this->dispatch->addresses = file(__DIR__."/storage/addresses.csv");
                     $i = 0;
                     $count = 0;
-                    while($this->dispatch->addresses[$i] != NULL) {
+                    while($this->dispatch->addresses[$i] != NULL) 
+                    {
                         $this->dispatch->address = explode(";" ,$this->dispatch->addresses[$i]);
-                        if ($this->dispatch->Dispatch() == true) {
+                        if ($this->dispatch->Dispatch() == true) 
+                        {
                             $count++;
                         }
-                        if ($this->dispatch->serverstatus == false){
+                        if ($this->dispatch->serverstatus == false)
+                        {
                         break;
                         return $this->render("dispatch", ["statement" => "Der Server ist zurzeit nicht erreichbar! "]);
                         }
@@ -128,12 +139,15 @@ class Controller
                     $random = rand(0, (count($this->dispatch->addresses) - 1));
                     $i = 0;
                     $count = 0;
-                    while($i < $_POST['numberOfDispatch']) {
+                    while($i < $_POST['numberOfDispatch']) 
+                    {
                         $this->dispatch->address = explode(";" ,$this->dispatch->addresses[$random]);
-                        if ($this->dispatch->Dispatch() == true) {
+                        if ($this->dispatch->Dispatch() == true) 
+                        {
                             $count++;
                         }
-                        if ($this->dispatch->serverstatus == false){
+                        if ($this->dispatch->serverstatus == false)
+                        {
                         break;
                         return $this->render("dispatch", ["statement" => "Der Server ist zurzeit nicht erreichbar! "]);
                         }
