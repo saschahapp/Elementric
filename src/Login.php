@@ -36,7 +36,7 @@ class Login
     public function logout()
     {
         unset($_SESSION["user"]);
-        session_regenerate_id();
+        session_regenerate_id(true);
         return Header("Location: login");
     }
 }
