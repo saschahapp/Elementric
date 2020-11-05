@@ -15,7 +15,9 @@ class Login
         {
             $_SESSION["user"] = $email;
             session_regenerate_id(true);
+            ldap_close($ds);
             return true;
+
         } 
         else
         {
