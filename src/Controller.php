@@ -22,7 +22,7 @@ class Controller
         if(!empty($_POST['username']) && !empty($_POST['password']))
         {
 
-            if($this->login->login($_POST['username'], $_POST['password'])) {
+            if($this->login->login($_POST['username']."@leebmann.de", $_POST['password'])) {
 
                 return Header("Location: dispatch");
             } 

@@ -24,11 +24,11 @@
             </div>
             <form method="POST" action="login">
                 <div class="input-group mb-3" style="margin-top: 30px">
-                    <div class="input-group-prepend ">
-                        <strong>
-                        <span class="input-group-text" id="inputGroup-sizing-default">Benutzername: </span>
-                        </strong>
-                        <input type="text" name="username" class="form-control " aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
+                    <div class="input-group mb-3">
+                        <input  name="username" type="text" class="form-control" placeholder="Email" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                            <span class="input-group-text" id="basic-addon2">@leebmann.de</span>
+                        </div>
                     </div>
                 </div>
                 <div class="input-group mb-3">
@@ -36,7 +36,7 @@
                             <strong>
                             <span class="input-group-text" id="inputGroup-sizing-default">Passwort: </span>
                             </strong>
-                            <input type="password" name="password" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
+                            <input type="password" name="password" class="form-control"aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
                         </div>
                 </div>
                 <div style="margin-left: 130px">

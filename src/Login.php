@@ -8,20 +8,19 @@ class Login
         $dotenv->load();
     }
 
-    public function login($username, $password)
+    public function login($email, $password)
     {
-        if (($username == $_ENV["LOGIN_USERNAME1"] && $password == $_ENV["LOGIN_PASSWORD1"]) ||
-            ($username == $_ENV["LOGIN_USERNAME2"] && $password == $_ENV["LOGIN_PASSWORD2"]) ||
-            ($username == $_ENV["LOGIN_USERNAME3"] && $password == $_ENV["LOGIN_PASSWORD3"]))
-            {
-                $_SESSION["user"] = $_POST['username'];
-                session_regenerate_id(true);
-                return true;
-            } 
-            else
-            {
-                return false;
-            }
+        $ds = ldap_connect($_ENV['LDAP_IP']);
+        if (ldap_bind($ds, $email, $password))
+        {
+            $_SESSION["user"] = $email;
+            session_regenerate_id(true);
+            return true;
+        } 
+        else
+        {
+            return false;
+        }
     }
 
     public function check()

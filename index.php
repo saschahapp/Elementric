@@ -2,15 +2,14 @@
 
 session_start();
 
+error_reporting(0);
+
 if ($_SERVER['REQUEST_URI'] == "/")
 {
    $_SERVER['REQUEST_URI'] = "/login";
 }
 
 require (__DIR__."/src/vendor/autoload.php");
-require (__DIR__."/src/Dispatch.php");
-require (__DIR__."/src/Login.php");
-require (__DIR__."/src/Controller.php");
 
 function filterHtmlTags($value)
 {
